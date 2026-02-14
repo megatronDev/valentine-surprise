@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For My Valentine</title>
+    <!-- Note the 'path' argument here for FastAPI -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}" />
+  </head>
+  <body>
+    <!-- Background Hearts -->
+    <div class="hearts-container">
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+    </div>
+
+    <div class="card">
+      <div class="image-container">
+        <!-- JS will load the image here -->
+        <img id="valentine-img" src="" alt="Us" />
+        <p class="hint">(click image to see more)</p>
+      </div>
+
+      <div class="content" id="main-content">
+        <h1>Будешь моей валентинкай?</h1>
+        <div class="buttons">
+          <button id="yes-btn">Да</button>
+          <button id="no-btn">Нет</button>
+        </div>
+      </div>
+
+      <div class="success-message hidden" id="success-msg">
+        <h1>&lt;3</h1>
+        <p>Люблю тебя больше всего на свете, это чувство невозможно у меня отнять. Ты самая прекрасная и красивая во всем мире, позволь мне тебя пацеловать!</p>
+      </div>
+    </div>
+
+    <!-- Note the 'path' argument here for FastAPI -->
+    <script src="{{ url_for('static', path='/script.js') }}"></script>
+  </body>
+</html>
