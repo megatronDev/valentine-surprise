@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === SETUP ===
-    // Put the names of the images inside 'static/images' here
+    // 1. CONFIGURATION
     const images = [
         'img.png',
         'img_1.png',
@@ -12,52 +11,73 @@ document.addEventListener('DOMContentLoaded', () => {
         'us.jpg'
     ];
 
-    let currentIndex = 0;
     const imgElement = document.getElementById('valentine-img');
     const yesBtn = document.getElementById('yes-btn');
     const noBtn = document.getElementById('no-btn');
     const mainContent = document.getElementById('main-content');
     const successMsg = document.getElementById('success-msg');
 
-    // Helper to set image source
-    const setImg = () => {
+    let currentIndex = 0;
+
+    // 2. IMAGE LOGIC
+    const updateImage = () => {
         if(images.length > 0) {
             imgElement.src = `/static/images/${images[currentIndex]}`;
         }
     };
 
-    // Initial Load
-    setImg();
+    // Initial load
+    updateImage();
 
-    // 1. Cycle Images on Click
+    // Click image to cycle
     imgElement.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % images.length;
-        setImg();
+        updateImage();
     });
 
-    // 2. Handle YES Click
+    // 3. YES BUTTON LOGIC
     yesBtn.addEventListener('click', async () => {
-        // UI Updates
         mainContent.classList.add('hidden');
         successMsg.classList.remove('hidden');
 
-        // Send API Request to FastAPI Backend
         try {
             await fetch('/she-said-yes', { method: 'POST' });
-            console.log("Notification sent!");
         } catch (err) {
             console.error("Error sending notification", err);
         }
     });
 
-    // 3. Handle NO Click (Just for fun)
-    noBtn.addEventListener('click', () => {
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 100);
+    // 4. RUNAWAY NO BUTTON LOGIC
+    const moveButton = () => {
+        // Get window dimensions
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
 
-        // Make the button jump around so she can't click no easily
-        noBtn.style.position = 'absolute';
-        noBtn.style.left = `${x}px`;
-        noBtn.style.top = `${y}px`;
+        // Get button dimensions
+        const btnWidth = noBtn.offsetWidth;
+        const btnHeight = noBtn.offsetHeight;
+
+        // Calculate random position
+        // We subtract the button size so it doesn't go off the screen edge
+        const randomX = Math.random() * (windowWidth - btnWidth);
+        const randomY = Math.random() * (windowHeight - btnHeight);
+
+        // Apply styles
+        // CRITICAL: Use 'fixed' so it moves relative to screen, not the card
+        noBtn.style.position = 'fixed';
+        noBtn.style.left = `${randomX}px`;
+        noBtn.style.top = `${randomY}px`;
+
+        // Ensure it stays on top
+        noBtn.style.zIndex = "9999";
+    };
+
+    // Trigger on Mouse Over (Desktop)
+    noBtn.addEventListener('mouseover', moveButton);
+
+    // Trigger on Touch Start (Mobile)
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Stop the click
+        moveButton();
     });
 });
